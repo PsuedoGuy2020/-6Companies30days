@@ -1,0 +1,33 @@
+/*
+DYNAMMIC PROGRAMMING
+*/
+class Solution {
+public:
+    vector<int> largestDivisibleSubset(vector<int>& nums) {
+        int len = nums.size();
+        sort(nums.begin(), nums.end());
+        vector<int> DP(len, 1);
+        for(int idx = 0;idx < len;idx++) {
+            for(int jdx = 0;jdx < idx;jdx++) {
+                if(nums[idx] % nums[jdx] == 0 && DP[idx] < DP[jdx] + 1) {
+                    DP[idx] = DP[jdx] + 1;
+                }
+            }
+        }
+        int maxm = *max_element(DP.begin(), DP.end());
+        int lftPtr = 0;
+        vector<int> ans;
+        for(int idx = len - 1;idx >= 0;idx--) {
+            if(DP[idx] == maxm && ((lftPtr == 0) || lftPtr % nums[idx] == 0)) {
+                ans.push_back(nums[idx]); 
+                maxm = maxm - 1;           
+                lftPtr = nums[idx];
+            }
+        }
+        return ans;   
+    }
+};
+/*
+TIME COMPLEXITY - O(N)
+SPACE COMPLEXITY - O(N)
+*/
